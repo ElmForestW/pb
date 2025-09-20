@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "pb",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-09-13",
+	"observability": {
+		"enabled": true,
+	},
+	"vars": {
+		"HOSTNAME": "https://pb.elmforestw-db1.workers.dev",
+	},
+	"kv_namespaces": [
+		{
+			"binding": "PASTES",
+			"id": "719da67b19bb42b69d71cb50a1504ab8",
+		},
+	],
+}
