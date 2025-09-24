@@ -1,7 +1,6 @@
 import { AutoRouter } from 'itty-router';
 
 interface Paste {
-	id: string;
 	content: string;
 	created_at: number;
 }
@@ -106,7 +105,6 @@ SEE ALSO
 
 		// create paste object
 		const paste: Paste = {
-			id: k,
 			content: v,
 			created_at: Date.now(),
 		};
