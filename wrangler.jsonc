@@ -7,7 +7,7 @@
 		"enabled": true,
 	},
 	"vars": {
-		"HOSTNAME": "https://pb.elmforestw-db1.workers.dev",
+		"HOSTNAME": "https://pb.elmf.me",
 	},
 	"kv_namespaces": [
 		{
