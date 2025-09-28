@@ -20,16 +20,16 @@ describe('pb worker', () => {
 
 			EXAMPLES
 				Upload some text:
-					$ curl -F 'c=<text>' https://pb.elmforestw-db1.workers.dev
+					$ curl -F 'c=<text>' https://pb.elmf.me
 
 				Upload a file:
-					$ curl -F 'c=@<file>' https://pb.elmforestw-db1.workers.dev
+					$ curl -F 'c=@<file>' https://pb.elmf.me
 
 				Or use it in a pipe:
-					$ cmd | curl -F 'c=@-' https://pb.elmforestw-db1.workers.dev
+					$ cmd | curl -F 'c=@-' https://pb.elmf.me
 
 				HTML Form:
-					Open https://pb.elmforestw-db1.workers.dev/form in a web browser.
+					Open https://pb.elmf.me/form in a web browser.
 
 			AUTHORS
 				ElmF <elmforestw@proton.me>
