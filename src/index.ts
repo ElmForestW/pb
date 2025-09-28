@@ -94,10 +94,10 @@ SEE ALSO
 			return new Response('bad request, invalid input', { status: 400 });
 		}
 		const ttl = (() => {
-			if (typeof data.get('ttl') !== 'string') return undefined;
+			if (typeof data.get('ttl') !== 'string' || data.get('ttl') == '') return undefined;
 			const n = parseInt(data.get('ttl') as string, 10);
-			if (Number.isNaN(n)) throw new Error('bad request, invalid ttl', { status: 400 });
-			if (n < 60) throw new Error('bad request, ttl must be > 60', { status: 400 });
+			if (Number.isNaN(n)) throw new Response('bad request, invalid ttl', { status: 400 });
+			if (n < 60) throw new Response('bad request, ttl must be > 60', { status: 400 });
 			return n;
 		})();
 
@@ -151,10 +151,10 @@ SEE ALSO
 		return !json
 			? new Response(paste.content)
 			: Response.json({
-					id: request.id,
-					content: paste.content,
-					created_at: paste.created_at,
-				});
+				id: request.id,
+				content: paste.content,
+				created_at: paste.created_at,
+			});
 	});
 
 export default { ...router };
