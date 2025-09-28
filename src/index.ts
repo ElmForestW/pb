@@ -3,6 +3,7 @@ import { AutoRouter } from 'itty-router';
 interface Paste {
 	content: string;
 	created_at: number;
+	ttl: undefined | number;
 }
 
 function randomId(length = 4) {
@@ -60,9 +61,19 @@ SEE ALSO
   <body>
     <form action="/" method="post">
       <textarea name="c" rows="10" cols="50"></textarea><br>
+      <label for="ttl">ttl</label>
+      <input name="ttl" type="number">
       <input type="submit" value="paste">
     </form>
   </body>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    label {
+      display: block;
+    }
+  </style>
 </html>`,
 				{
 					headers: {
@@ -80,8 +91,15 @@ SEE ALSO
 		const data = await request.formData();
 		const input = data.get('c');
 		if (!input || (typeof input === 'string' && !input.trim())) {
-			return new Response('bad request', { status: 400 });
+			return new Response('bad request, invalid input', { status: 400 });
 		}
+		const ttl = (() => {
+			if (typeof data.get('ttl') !== 'string') return undefined;
+			const n = parseInt(data.get('ttl') as string, 10);
+			if (Number.isNaN(n)) throw new Error('bad request, invalid ttl', { status: 400 });
+			if (n < 60) throw new Error('bad request, ttl must be > 60', { status: 400 });
+			return n;
+		})();
 
 		// read input content
 		let v: string;
@@ -107,13 +125,14 @@ SEE ALSO
 		const paste: Paste = {
 			content: v,
 			created_at: Date.now(),
+			ttl: ttl,
 		};
 
 		// store in KV
-		await env.PASTES.put(k, JSON.stringify(paste));
+		await env.PASTES.put(k, JSON.stringify(paste), { expirationTtl: ttl });
 
 		// return response without content
-		const result = { id: k, created_at: paste.created_at, url: `${env.HOSTNAME}/${k}` };
+		const result = { id: k, created_at: paste.created_at, ttl: ttl ? ttl : 'does not expire', url: `${env.HOSTNAME}/${k}` };
 		return new Response(JSON.stringify(result, null, 2), {
 			headers: { 'Content-Type': 'application/json; charset=UTF-8' },
 		});
