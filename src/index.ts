@@ -93,13 +93,19 @@ SEE ALSO
 		if (!input || (typeof input === 'string' && !input.trim())) {
 			return new Response('bad request, invalid input', { status: 400 });
 		}
-		const ttl = (() => {
-			if (typeof data.get('ttl') !== 'string' || data.get('ttl') == '') return undefined;
-			const n = parseInt(data.get('ttl') as string, 10);
-			if (Number.isNaN(n)) throw new Response('bad request, invalid ttl', { status: 400 });
-			if (n < 60) throw new Response('bad request, ttl must be > 60', { status: 400 });
-			return n;
-		})();
+		const rawTtl = data.get('ttl');
+		let ttl: number | undefined;
+
+		if (typeof rawTtl === 'string' && rawTtl !== '') {
+			const n = parseInt(rawTtl, 10);
+			if (Number.isNaN(n)) {
+				return new Response('bad request, invalid ttl', { status: 400 });
+			}
+			if (n < 60) {
+				return new Response('bad request, ttl must be > 60', { status: 400 });
+			}
+			ttl = n;
+		}
 
 		// read input content
 		let v: string;
